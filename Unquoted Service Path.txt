@@ -1,0 +1,31 @@
+Unquoted Service Path
+
+Nguyên nhân dẫn đến lỗ hổng:
+Từ hàm CreateProcess: hàm tạo ra một tiến trình mới và luồng chính của nó
+
+BOOL CreateProcessA( 
+  LPCSTR lpApplicationName, 
+  LPSTR lpCommandLine, 
+  LPSECURITY_ATTRIBUTES lpProcessAttributes, 
+  LPSECURITY_ATTRIBUTES lpThreadAttributes, 
+  BOOL bInheritHandles, 
+  DWORD dwCreationFlags, 
+  LPVOID lpEnvironment, 
+  LPCSTR lpCurrentDirectory, 
+  LPSTARTUPINFOA lpStartupInfo, 
+  LPPROCESS_INFORMATION lpProcessInformation 
+);
+
+Chú ý: Tham số chuỗi lpApplicationName
+
++ Là module sẽ được thực thi và có thể là ứng dung chạy trên windows
++ Chuỗi này có thể là đường dẫn đầy đủ và tên tệp của module sẽ được thực thi. 
++ Nếu tên tệp là chuỗi văn bản dài chứa khoảng trắng và không được đặt trong dấu ngoặc kép, tên tệp sẽ được thực thi từ trái sang phải cho đến khi đạt đến khoảng trắng và sẽ thêm .exe vào cuối đường dẫn có khoảng trắng này.
+  VD: C:\Program Files\A Subfolder\B Subfolder\C Subfolder\SomeExecutable.exe
+  ** Đường dẫn này sẽ được đọc như sau:
+     - C:\Program.exe
+     - C:\Program Files\A.exe
+     - C:\Program Files\A Subfolder\B.exe
+     - C:\Program Files\A Subfolder\B Subfolder\C.exe
+     - C:\Program Files\A Subfolder\B Subfolder\C Subfolder\SomeExecutable.exe
+     Mỗi lần không tìm thấy file .exe để thực thi, đường dẫn tiếp tục được đẩy + gán .exe để thực thi tiếp

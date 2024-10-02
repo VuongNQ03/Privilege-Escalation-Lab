@@ -1,0 +1,41 @@
++ Unquoted Service Path
+  Kỹ thuật: Khai thác vào dịch vụ thỏa mãn điều kiện: Đường dẫn thực thi có khoảng trắng vào không nằm trong dấu ngoặc kép (dịch vụ thực thi tự động)=>Tìm trong đường dẫn, ở phần nào thì User có quyền ghi => Thả tệp độc hại vào trong đường dẫn thực thi (file .exe) => Máy tính thực hiện 1 cách không mong muốn
+ 
++ Weak Service Permissions
+  Kỹ thuật: Dựa vào service yếu (service được cấp cho user thường nhưng có nhiều quyền hạn để sửa đổi - trong bài lab là PTOC) => thay đổi cấu hình dịch vụ (hướng tới đường dẫn thực thi của dịch vụ) bằng đường dẫn độc tới tệp độc hại
+  ** Trong bài lab thiết lập, quyền dịch vụ được cấp PTOC
+   
++ Insecure Service Permissions
+
++ Weak Registry Permission
+  Kỹ thuật: Dựa vào registry cấu hình yếu (cung cấp nhiều quyền cho người dùng hoặc nhóm người dùng cho việc tiếp cận với thanh ghi chứa dịch vụ yếu => người dùng/ người trong nhóm đó có thể làm mọi thứ với dịch vụ được lưu trong registry đó), thay đổi ImagePath của service <=> thay đổi đường dẫn thực thi của service bằng đường dẫn tệp độc hại 
+
++ Always Install Elevated
+  AlwaysInstallElevated: Là thiết lập trong chính sách windows cho phép các gói Windows (tệp .msi) được cài đặt với quyền quản trị
+  Kỹ thuật: Tạo tệp .msi nhưng chứa payload độc hại => khi khởi chạy cài đặt => chiếm được quyền admin 
+
+
++ Security Identifier (SID):
+  - Là mã định dạng cho mỗi đối tượng trong Windows
+  - Có tính duy nhất, khi user bị xóa, sid cx mất theo
+  - Hệ điều hành sử dụng SID để nhận dạng
+  - Cấu trúc:
+    + Revision: Phiên bản SID (Luôn là 1 cho SID Windows)
+    + Identifier Authority (IA): Định danh cho tổ chức cấp phát SID có các giá trị:
+      - 0: Null Authority: SID của đối tượng không được biết
+      - 1: World Authority
+      - 2: Local Authority
+      - 3: Creator Authority
+      - 4: Non-unique Authority
+      - 5: NT Authority
+      - 9: Resource Manager Authority
+
++ Access token:
+  - 
+
+Cách windows nhận dạng user/principal trên hệ thống (SID) => Cách Windows xác định có nên cấp/từ chối hoạt động (access token + MIC) => 
+    
+
+powershell -ep bypass:
++ Chạy Powershell với chế độ bypass <=> powershell có thể chạy mà không bị chặn bởi các chính sách bảo mật hiện tại
++ -ep hoặc -ExecutionPolicy: Xác định chính sách thực thi mà PowerShell sử dụng
